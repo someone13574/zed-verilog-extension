@@ -126,9 +126,14 @@ impl zed::Extension for VerilogExtension {
             ));
         }
 
+        let language_settings =
+            zed::settings::LanguageSettings::for_worktree(Some("Verilog"), worktree)?;
         Ok(zed::Command {
             command: self.language_server_binary_path(language_server_id, worktree)?,
-            args: vec!["--indentation_spaces".to_string(), "4".to_string()],
+            args: vec![
+                "--indentation_spaces".to_string(),
+                language_settings.tab_size.to_string(),
+            ],
             env: Default::default(),
         })
     }
