@@ -30,8 +30,15 @@ impl VerilogExtension {
             &zed::LanguageServerInstallationStatus::CheckingForUpdate,
         );
         let (asset, version) = self.get_binary_asset()?;
-        let version_dir = format!("verible-{version}");
-        let binary_path = format!("{version_dir}/bin/verible-verilog-ls");
+
+        let (platform, _) = zed::current_platform();
+        let (suffix, binary_path) = match platform {
+            zed::Os::Mac => ("-macOS", "bin/verible-verilog-ls"),
+            zed::Os::Linux => ("", "bin/verible-verilog-ls"),
+            zed::Os::Windows => ("-win64", "verible-verilog-ls.exe"),
+        };
+        let version_dir = format!("verible-{version}{suffix}");
+        let binary_path = format!("{version_dir}/{binary_path}");
 
         if !fs::metadata(&binary_path).map_or(false, |stat| stat.is_file()) {
             zed::set_language_server_installation_status(
@@ -39,7 +46,6 @@ impl VerilogExtension {
                 &zed::LanguageServerInstallationStatus::Downloading,
             );
 
-            let (platform, _) = zed::current_platform();
             zed::download_file(
                 &asset.download_url,
                 "",
