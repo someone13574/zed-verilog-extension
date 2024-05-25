@@ -61,7 +61,6 @@ jobs:
       - name: Create archive
         run: |
           mv target/aarch64-unknown-linux-gnu/release/veridian veridian
-          strip veridian
           tar -czvf veridian-aarch64-linux-gnu.tar.gz veridian
 
       - name: Add asset to release
