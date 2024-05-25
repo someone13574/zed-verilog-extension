@@ -1,89 +1,13 @@
-use std::fs;
-use zed::{LanguageServerId, Worktree};
-use zed_extension_api as zed;
+use language_server::{verible::Verible, veridian::Veridian, LanguageServer};
 
-mod platform;
+use zed::{LanguageServerId, Worktree};
+use zed_extension_api::{self as zed};
+
+mod language_server;
 
 struct VerilogExtension {
-    cached_binary_path: Option<String>,
-}
-
-impl VerilogExtension {
-    const LANGUAGE_SERVER_ID: &'static str = "veridian";
-
-    fn search_for_varidian(&self, worktree: &zed::Worktree) -> Option<String> {
-        if let Some(path) = worktree.which(&platform::binary_name()) {
-            return Some(path);
-        }
-
-        if let Some(path) = &self.cached_binary_path {
-            if fs::metadata(path).map_or(false, |metadata| metadata.is_file()) {
-                return Some(path.clone());
-            }
-        }
-
-        None
-    }
-
-    fn get_veridian_asset(
-        &self,
-        language_server_id: &LanguageServerId,
-    ) -> zed::Result<(zed::GithubReleaseAsset, String)> {
-        zed::set_language_server_installation_status(
-            language_server_id,
-            &zed::LanguageServerInstallationStatus::CheckingForUpdate,
-        );
-
-        let release = zed::latest_github_release(
-            "someone13574/zed-verilog-extension",
-            zed::GithubReleaseOptions {
-                require_assets: true,
-                pre_release: false,
-            },
-        )?;
-
-        let asset_name = platform::veridian_asset_name()?;
-        let asset = release
-            .assets
-            .into_iter()
-            .find(|asset| asset.name == asset_name)
-            .ok_or_else(|| format!("no asset found matching `{asset_name}`"))?;
-
-        Ok((asset, release.version))
-    }
-
-    fn download_veridian(&mut self, language_server_id: &LanguageServerId) -> zed::Result<String> {
-        let (asset, version) = self.get_veridian_asset(language_server_id)?;
-        let binary_path = format!("{version}/{}", platform::binary_name());
-
-        if !fs::metadata(&binary_path).map_or(false, |metadata| metadata.is_file()) {
-            zed::set_language_server_installation_status(
-                language_server_id,
-                &zed::LanguageServerInstallationStatus::Downloading,
-            );
-
-            zed::download_file(
-                &asset.download_url,
-                &version,
-                platform::veridian_asset_file_type(),
-            )
-            .map_err(|err| format!("failed to download file `{}`: {err}", asset.download_url))?;
-
-            let entries =
-                fs::read_dir(".").map_err(|e| format!("failed to list working directory {e}"))?;
-            for entry in entries {
-                println!("{:?}", entry.unwrap().path());
-            }
-
-            zed::set_language_server_installation_status(
-                language_server_id,
-                &zed::LanguageServerInstallationStatus::None,
-            );
-        }
-
-        self.cached_binary_path = Some(binary_path.clone());
-        Ok(binary_path)
-    }
+    verible: Verible,
+    veridian: Veridian,
 }
 
 impl zed::Extension for VerilogExtension {
@@ -92,7 +16,8 @@ impl zed::Extension for VerilogExtension {
         Self: Sized,
     {
         Self {
-            cached_binary_path: None,
+            verible: Default::default(),
+            veridian: Default::default(),
         }
     }
 
@@ -101,24 +26,31 @@ impl zed::Extension for VerilogExtension {
         language_server_id: &LanguageServerId,
         worktree: &Worktree,
     ) -> zed::Result<zed::Command> {
-        if language_server_id.as_ref() != Self::LANGUAGE_SERVER_ID {
-            return Err(format!(
-                "unknown language server: {}",
-                language_server_id.as_ref()
-            ));
+        match language_server_id.as_ref() {
+            Veridian::LANGUAGE_SERVER_ID => Ok(zed::Command {
+                command: self
+                    .veridian
+                    .get_cached_binary(language_server_id, worktree)?,
+                args: Vec::new(),
+                env: Vec::new(),
+            }),
+            Verible::LANGUAGE_SERVER_ID => {
+                let language_settings =
+                    zed::settings::LanguageSettings::for_worktree(Some("Verilog"), worktree)?;
+
+                Ok(zed::Command {
+                    command: self
+                        .verible
+                        .get_cached_binary(language_server_id, worktree)?,
+                    args: vec![
+                        "--indentation_spaces".to_string(),
+                        language_settings.tab_size.to_string(),
+                    ],
+                    env: Vec::new(),
+                })
+            }
+            id => Err(format!("unknown language server `{id}`"))?,
         }
-
-        let veridian_binary = if let Some(binary) = self.search_for_varidian(worktree) {
-            binary
-        } else {
-            self.download_veridian(language_server_id)?
-        };
-
-        Ok(zed::Command {
-            command: veridian_binary,
-            args: Vec::new(),
-            env: Default::default(),
-        })
     }
 }
 
