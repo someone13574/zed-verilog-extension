@@ -1,0 +1,142 @@
+name: Build Veridian
+permissions: write-all
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build-linux-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Veridian
+        uses: actions/checkout@v4
+        with:
+          repository: vivekmalneedi/veridian
+
+      - name: Install Rust Toolchain
+        uses: "dtolnay/rust-toolchain@v1"
+        with:
+          toolchain: stable
+          targets: x86_64-unknown-linux-gnu
+
+      - name: Run cargo build
+        run: cargo build --release --target=x86_64-unknown-linux-gnu
+
+      - name: Create archive
+        run: |
+          mv target/x86_64-unknown-linux-gnu/release/veridian veridian
+          strip veridian
+          tar -czvf veridian-x86_64-linux-gnu.tar.gz veridian
+
+      - name: Add asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: veridian-x86_64-linux-gnu.tar.gz
+
+  build-linux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Veridian
+        uses: actions/checkout@v4
+        with:
+          repository: vivekmalneedi/veridian
+
+      - name: Install Rust Toolchain
+        uses: "dtolnay/rust-toolchain@v1"
+        with:
+          toolchain: stable
+          targets: aarch64-unknown-linux-gnu
+
+      - name: Run cargo build
+        run: cargo build --release --target=aarch64-unknown-linux-gnu
+
+      - name: Create archive
+        run: |
+          mv target/aarch64-unknown-linux-gnu/release/veridian veridian
+          strip veridian
+          tar -czvf veridian-aarch64-linux-gnu.tar.gz veridian
+
+      - name: Add asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: veridian-aarch64-linux-gnu.tar.gz
+
+  build-macos-x86_64:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Veridian
+        uses: actions/checkout@v4
+        with:
+          repository: vivekmalneedi/veridian
+
+      - name: Install Rust Toolchain
+        uses: "dtolnay/rust-toolchain@v1"
+        with:
+          toolchain: stable
+          targets: x86_64-apple-darwin
+
+      - name: Run cargo build
+        run: cargo build --release --target=x86_64-apple-darwin
+
+      - name: Create archive
+        run: |
+          mv target/x86_64-apple-darwin/release/veridian veridian
+          tar -czvf veridian-x86_64-macos.tar.gz veridian
+
+      - name: Add asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: veridian-x86_64-macos.tar.gz
+
+  build-macos-aarch64:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Veridian
+        uses: actions/checkout@v4
+        with:
+          repository: vivekmalneedi/veridian
+
+      - name: Install Rust Toolchain
+        uses: "dtolnay/rust-toolchain@v1"
+        with:
+          toolchain: stable
+          targets: aarch64-apple-darwin
+
+      - name: Run cargo build
+        run: cargo build --release --target=aarch64-apple-darwin
+
+      - name: Create archive
+        run: |
+          mv target/aarch64-apple-darwin/release/veridian veridian
+          tar -czvf veridian-aarch64-macos.tar.gz veridian
+
+      - name: Add asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: veridian-aarch64-macos.tar.gz
+
+  build-windows-x86_64:
+    runs-on: "windows-latest"
+    steps:
+      - name: Checkout Veridian
+        uses: actions/checkout@v4
+        with:
+          repository: vivekmalneedi/veridian
+
+      - name: Install Rust Toolchain
+        uses: "dtolnay/rust-toolchain@v1"
+        with:
+          toolchain: stable
+          targets: x86_64-pc-windows-msvc
+
+      - name: Run cargo build
+        run: cargo build --release --target=x86_64-pc-windows-msvc
+
+      - name: Create archive
+        run: Compress-Archive -Path target/x86_64-pc-windows-msvc/release/veridian.exe -DestinationPath veridian-x86_64-windows-mscv.zip
+
+      - name: Add asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: veridian-x86_64-windows-mscv.zip
