@@ -6,8 +6,8 @@ schema_version = 1
 authors = ["Owen Law <owenlaw222@gmail.com>"]
 repository = "https://github.com/someone13574/zed-verilog-extension"
 
-[language_servers.verible-ls]
-name = "Verible LS"
+[language_servers.veridian]
+name = "Veridian"
 languages = ["Verilog", "SystemVerilog"]
 
 [grammars.verilog]
