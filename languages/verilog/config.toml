@@ -1,6 +1,6 @@
 name = "Verilog"
 grammar = "verilog"
-path_suffixes = ["v", "sv"]
+path_suffixes = ["v", "sv", "svh"]
 brackets = [
     { start = "{", end = "}", close = true, newline = false },
     { start = "[", end = "]", close = true, newline = false },
