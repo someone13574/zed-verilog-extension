@@ -10,6 +10,7 @@ pub struct Veridian {
 impl LanguageServer for Veridian {
     const LANGUAGE_SERVER_ID: &'static str = "veridian";
     const DOWNLOAD_REPO: &'static str = "someone13574/zed-verilog-extension";
+    const DOWNLOAD_TAG: &'static str = "v0.0.4";
 
     fn binary_name(os: zed_extension_api::Os) -> String {
         match os {
@@ -56,13 +57,7 @@ impl LanguageServer for Veridian {
             &zed::LanguageServerInstallationStatus::CheckingForUpdate,
         );
 
-        let release = zed::latest_github_release(
-            Self::DOWNLOAD_REPO,
-            zed::GithubReleaseOptions {
-                require_assets: true,
-                pre_release: false,
-            },
-        )?;
+        let release = zed::github_release_by_tag_name(Self::DOWNLOAD_REPO, Self::DOWNLOAD_TAG)?;
 
         let asset_name = Self::asset_name(&release.version, os, arch)?;
         let asset = release
