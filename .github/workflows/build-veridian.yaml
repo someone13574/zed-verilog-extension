@@ -4,6 +4,9 @@ on:
   release:
     types:
       - published
+  pull_request:
+    types:
+      - opened
 
 jobs:
   build-linux-x86_64:
