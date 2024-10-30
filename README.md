@@ -39,8 +39,8 @@ Secondly, you can configure the veridian language server by creating a `veridian
 
 ## Acknowledgements
 
- - [tree-sitter/tree-sitter-verilog](https://github.com/tree-sitter/tree-sitter-verilog) for the treesitter grammar.
- - [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/tree/master/queries/verilog) for the syntax highlighting Scheme files.
+ - [gmlarumbe/tree-sitter-systemverilog](https://github.com/gmlarumbe/tree-sitter-systemverilog) for the treesitter grammar.
+ - [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/tree/master/queries/verilog) for the queries.
  - [chipsalliance/verible](https://github.com/chipsalliance/verible) for the diagnostics and formatting language server.
  - [vivekmalneedi/veridian](https://github.com/vivekmalneedi/veridian) for the rest of the language server features.
 ## License
