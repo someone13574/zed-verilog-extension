@@ -67,7 +67,7 @@ impl LanguageServer for Veridian {
             .ok_or(format!("no asset found matching `{asset_name}`"))?;
         let binary_path = Self::binary_path(&release.version, os, arch)?;
 
-        if !fs::metadata(&binary_path).map_or(false, |metadata| metadata.is_file()) {
+        if !fs::metadata(&binary_path).is_ok_and(|metadata| metadata.is_file()) {
             zed::set_language_server_installation_status(
                 language_server_id,
                 &zed::LanguageServerInstallationStatus::Downloading,
@@ -98,7 +98,7 @@ impl LanguageServer for Veridian {
         worktree: &zed_extension_api::Worktree,
     ) -> zed_extension_api::Result<String> {
         if let Some(path) = &self.cached_binary {
-            if !fs::metadata(path).map_or(false, |metadata| metadata.is_file()) {
+            if !fs::metadata(path).is_ok_and(|metadata| metadata.is_file()) {
                 self.cached_binary = None;
             } else {
                 return Ok(path.to_string());
