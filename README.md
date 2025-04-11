@@ -27,7 +27,7 @@ Configuration for this extension is done in two places. First is by adding "Veri
 ```json
 "languages": {
     "Verilog": {
-        ...
+
     }
 }
 ```
