@@ -45,4 +45,4 @@ Secondly, you can configure the veridian language server by creating a `veridian
  - [vivekmalneedi/veridian](https://github.com/vivekmalneedi/veridian) for the rest of the language server features.
 ## License
 
-This project is licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0) license or the [MIT](http://opensource.org/licenses/MIT) license, at your option. See [COPYRIGHT](./copyright) for more details.
+This project is licensed under the [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0) license or the [MIT](http://opensource.org/licenses/MIT) license, at your option. See [COPYRIGHT](./COPYRIGHT) for more details.
