@@ -16,4 +16,4 @@ languages = ["Verilog", "SystemVerilog"]
 
 [grammars.verilog]
 repository = "https://github.com/gmlarumbe/tree-sitter-systemverilog"
-commit = "0dacb911daa9614a7c7e79a594d4cb9f478e6554"
+commit = "ba3c1e305caf948f718293c86c6018a82ed5043e"
