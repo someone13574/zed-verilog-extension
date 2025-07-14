@@ -29,6 +29,7 @@
   "join"
   "join_none"
   "join_any"
+  "forkjoin"
   "default"
   "break"
   "tagged"
@@ -65,22 +66,19 @@
   "const"
   "constraint"
   "unique"
+  "unique0"
   "do"
   "genvar"
   "inside"
-  "rand"
   "continue"
   "randc"
   "event"
   "global"
   "ref"
   "initial"
-  (unique_priority)
-  (bins_keyword)
-  (always_keyword)
-] @keyword
-
-[
+  "final"
+  "solve"
+  "typedef"
   "class"
   "endclass"
   "interface"
@@ -88,8 +86,10 @@
   "enum"
   "struct"
   "union"
-  "typedef"
-] @keyword.type
+  (unique_priority)
+  (bins_keyword)
+  (always_keyword)
+] @keyword
 
 [
   "function"
@@ -212,12 +212,21 @@
 [
   "or"
   "and"
+  "not"
+  "nor"
+  "nand"
+  "xor"
+  "xnor"
 ] @keyword.operator
 
 [
   "input"
   "output"
   "inout"
+  "var"
+  "wire"
+  "reg"
+  "packed"
   "signed"
   "unsigned"
   "assert"
@@ -226,6 +235,7 @@
   "disable"
   "automatic"
   "static"
+  "rand"
   (dpi_function_import_property)
   (dpi_task_import_property)
 ] @keyword.modifier
