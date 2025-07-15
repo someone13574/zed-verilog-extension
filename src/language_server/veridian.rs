@@ -36,8 +36,8 @@ impl LanguageServer for Veridian {
         Ok(match (os, arch) {
             (zed::Os::Mac, zed::Architecture::Aarch64) => "veridian-aarch64-macos.tar.gz",
             (zed::Os::Mac, zed::Architecture::X8664) => "veridian-aarch64-x86_64-macos.tar.gz",
-            (zed::Os::Linux, zed::Architecture::Aarch64) => "veridian-aarch64-linux-gnu.tar.gz",
-            (zed::Os::Linux, zed::Architecture::X8664) => "veridian-x86_64-linux-gnu.tar.gz",
+            (zed::Os::Linux, zed::Architecture::Aarch64) => "veridian-aarch64-linux-musl.tar.gz",
+            (zed::Os::Linux, zed::Architecture::X8664) => "veridian-x86_64-linux-musl.tar.gz",
             (zed::Os::Windows, zed::Architecture::X8664) => "veridian-x86_64-windows-mscv.zip",
             (os, arch) => {
                 return Err(format!("architecture {arch:?} not supported on {os:?}"));
