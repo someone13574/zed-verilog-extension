@@ -10,7 +10,7 @@ pub struct Verible {
 impl LanguageServer for Verible {
     const LANGUAGE_SERVER_ID: &'static str = "verible";
     const DOWNLOAD_REPO: &'static str = "chipsalliance/verible";
-    const DOWNLOAD_TAG: &'static str = "v0.0-3836-g86ee9bab";
+    const DOWNLOAD_TAG: &'static str = "v0.0-4011-g03c61290";
 
     fn binary_name(os: zed::Os) -> String {
         match os {
