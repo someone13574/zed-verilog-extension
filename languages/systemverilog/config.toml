@@ -1,11 +1,11 @@
-name = "Verilog"
-grammar = "verilog"
+name = "SystemVerilog"
+grammar = "systemverilog"
 path_suffixes = ["v", "sv", "svh"]
 brackets = [
     { start = "{", end = "}", close = true, newline = false },
     { start = "[", end = "]", close = true, newline = false },
     { start = "(", end = ")", close = true, newline = false },
     { start = "\"", end = "\"", close = true, newline = false },
-    { start = "begin", end = "end", close = true, newline = true }
+    { start = "begin", end = "end", close = true, newline = true },
 ]
 line_comments = ["// "]
