@@ -10,7 +10,7 @@ pub struct Veridian {
 impl LanguageServer for Veridian {
     const LANGUAGE_SERVER_ID: &'static str = "veridian";
     const DOWNLOAD_REPO: &'static str = "someone13574/zed-verilog-extension";
-    const DOWNLOAD_TAG: &'static str = "v0.0.8";
+    const DOWNLOAD_TAG: &'static str = "v0.0.9";
 
     fn binary_name(os: zed_extension_api::Os) -> String {
         match os {
