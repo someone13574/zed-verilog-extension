@@ -28,9 +28,7 @@ impl zed::Extension for VerilogExtension {
     ) -> zed::Result<zed::Command> {
         match language_server_id.as_ref() {
             Veridian::LANGUAGE_SERVER_ID => Ok(zed::Command {
-                command: self
-                    .veridian
-                    .get_cached_binary(language_server_id, worktree)?,
+                command: self.veridian.get_binary(language_server_id, worktree)?,
                 args: Vec::new(),
                 env: Vec::new(),
             }),
@@ -39,9 +37,7 @@ impl zed::Extension for VerilogExtension {
                     zed::settings::LanguageSettings::for_worktree(Some("Verilog"), worktree)?;
 
                 Ok(zed::Command {
-                    command: self
-                        .verible
-                        .get_cached_binary(language_server_id, worktree)?,
+                    command: self.verible.get_binary(language_server_id, worktree)?,
                     args: vec![
                         "--indentation_spaces".to_string(),
                         language_settings.tab_size.to_string(),
