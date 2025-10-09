@@ -246,7 +246,7 @@
   "directive_include"
 ] @keyword.import
 
-(comment) @comment @spell
+(comment) @comment
 
 [
   "@"
