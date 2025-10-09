@@ -243,10 +243,12 @@
 [
   "include"
   "import"
-  "directive_include"
 ] @keyword.import
 
-(comment) @comment
+[
+    (one_line_comment)
+    (block_comment)
+] @comment
 
 [
   "@"
@@ -567,25 +569,26 @@ c_name: (c_identifier) @function
 
 ; include
 (include_statement
-  (file_path_spec) @string.special.path)
+  (file_path_spec) @string)
 
 ; directive
 [
-  "directive_define"
-  "directive_default_nettype"
-  "directive_resetall"
-  "directive_timescale"
-  "directive_undef"
-  "directive_undefineall"
-  "directive_ifdef"
-  "directive_ifndef"
-  "directive_elsif"
-  "directive_endif"
-  "directive_else"
+  "`define"
+  "`default_nettype"
+  (resetall_compiler_directive)
+  (include_compiler_directive)
+  "`timescale"
+  "`undef"
+  (undefineall_compiler_directive)
+  "`ifdef"
+  "`ifndef"
+  "`elsif"
+  "`endif"
+  "`else"
 ] @keyword.directive.define
 
 (include_compiler_directive
-  (quoted_string) @string.special.path)
+  (quoted_string) @string)
 
 (include_compiler_directive
   (system_lib_string) @string)
