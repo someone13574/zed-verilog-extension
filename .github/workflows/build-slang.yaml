@@ -1,0 +1,76 @@
+name: Build Slang-server
+permissions: write-all
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - preset: clang-release
+            os: ubuntu-latest
+            container: rockylinux:8
+            # A bit older clang needed
+            extra_flags: -DCMAKE_CXX_COMPILER=clang++-19
+            archive_name: slang-server-x86_64-linux.tar.gz
+          - preset: macos-release
+            os: macos-latest
+            archive_name: slang-server-aarch64-macos.tar.gz
+          - preset: win64-release
+            os: windows-latest
+            archive_name: slang-server-x86_64-windows.zip
+
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+
+    steps:
+      # Install dependencies before checking out the repo to prevent git not being in $PATH
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          dnf -y update
+          dnf -y install 'dnf-command(config-manager)'
+          dnf config-manager --set-enabled powertools
+          dnf -y install epel-release
+          dnf -y install gcc-c++ clang cmake git make gcc-toolset-14-libatomic-devel
+
+      - name: Install dependencies (Windows)
+        uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.os == 'windows-latest'
+
+      - name: Install dependencies (macOS)
+        uses: maxim-lobanov/setup-xcode@v1
+        if: matrix.os == 'macos-latest'
+        with:
+          xcode-version: "latest"
+
+      - name: Checkout Slang-server
+        uses: actions/checkout@v4
+        with:
+          repository: hudson-trading/slang-server
+          submodules: true
+          fetch-depth: 0
+
+      - name: Configure
+        run: cmake --preset ${{ matrix.preset }} -DSLANG_CI_BUILD=ON -DSLANG_SERVER_INCLUDE_TESTS=OFF ${{ matrix.extra_flags }}
+
+      - name: Build
+        run: cmake --build build/${{ matrix.preset }} -j8
+
+      - name: Create archive
+        if: matrix.os != 'windows-latest'
+        run: |
+          mv build/${{ matrix.preset }}/bin/slang-server slang-server
+          tar -czvf ${{ matrix.archive_name }} slang-server
+
+      - name: Create archive (Windows)
+        if: matrix.os == 'windows-latest'
+        run: Compress-Archive -Path build/${{ matrix.preset }}/bin/slang-server.exe -DestinationPath ${{ matrix.archive_name }}
+
+      - name: Add asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ matrix.archive_name }}
