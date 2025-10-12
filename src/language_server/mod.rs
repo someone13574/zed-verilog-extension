@@ -1,3 +1,4 @@
+pub mod slang;
 pub mod verible;
 pub mod veridian;
 
