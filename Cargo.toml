@@ -1,6 +1,6 @@
 [package]
 name = "zed-verilog-extension"
-version = "0.0.10"
+version = "0.0.12"
 authors = ["Owen Law <owenlaw222@gmail.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -10,4 +10,4 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-zed_extension_api = "0.6.0"
+zed_extension_api = "0.7.0"
