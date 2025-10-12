@@ -10,7 +10,7 @@ Adds Verilog and SystemVerilog support for [Zed](https://zed.dev/).
 - Diagnostics
 - Auto-completion
 - Hover documentation
-- Formatting
+- Formatting (format-on-save is disabled by default)
 
 
 ## Installation
