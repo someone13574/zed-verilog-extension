@@ -1,4 +1,4 @@
-use language_server::{verible::Verible, veridian::Veridian, LanguageServer};
+use language_server::{slang::Slang, verible::Verible, veridian::Veridian, LanguageServer};
 
 use zed::{LanguageServerId, Worktree};
 use zed_extension_api::{self as zed};
@@ -8,6 +8,7 @@ mod language_server;
 struct VerilogExtension {
     verible: Verible,
     veridian: Veridian,
+    slang: Slang,
 }
 
 impl zed::Extension for VerilogExtension {
@@ -18,6 +19,7 @@ impl zed::Extension for VerilogExtension {
         Self {
             verible: Default::default(),
             veridian: Default::default(),
+            slang: Default::default(),
         }
     }
 
@@ -27,10 +29,13 @@ impl zed::Extension for VerilogExtension {
         worktree: &Worktree,
     ) -> zed::Result<zed::Command> {
         match language_server_id.as_ref() {
+            "slang" => Ok(zed::Command {
+                command: self.slang.get_binary(language_server_id, worktree)?,
+                args: Vec::new(),
+                env: Vec::new(),
+            }),
             Veridian::LANGUAGE_SERVER_ID => Ok(zed::Command {
-                command: self
-                    .veridian
-                    .get_cached_binary(language_server_id, worktree)?,
+                command: self.veridian.get_binary(language_server_id, worktree)?,
                 args: Vec::new(),
                 env: Vec::new(),
             }),
@@ -39,9 +44,7 @@ impl zed::Extension for VerilogExtension {
                     zed::settings::LanguageSettings::for_worktree(Some("Verilog"), worktree)?;
 
                 Ok(zed::Command {
-                    command: self
-                        .verible
-                        .get_cached_binary(language_server_id, worktree)?,
+                    command: self.verible.get_binary(language_server_id, worktree)?,
                     args: vec![
                         "--indentation_spaces".to_string(),
                         language_settings.tab_size.to_string(),

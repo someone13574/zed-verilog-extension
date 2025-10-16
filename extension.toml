@@ -14,6 +14,10 @@ languages = ["Verilog", "SystemVerilog"]
 name = "Veridian"
 languages = ["Verilog", "SystemVerilog"]
 
+[language_servers.slang]
+name = "Slang"
+languages = ["Verilog", "SystemVerilog"]
+
 [grammars.systemverilog]
 repository = "https://github.com/gmlarumbe/tree-sitter-systemverilog"
 commit = "e88937e66adc3ee7be0bfe40b7e937eafe4212bb"
