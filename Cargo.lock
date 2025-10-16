@@ -749,7 +749,7 @@ dependencies = [
 
 [[package]]
 name = "zed-verilog-extension"
-version = "0.0.12"
+version = "0.0.13"
 dependencies = [
  "zed_extension_api",
 ]

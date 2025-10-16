@@ -29,7 +29,7 @@ impl zed::Extension for VerilogExtension {
         worktree: &Worktree,
     ) -> zed::Result<zed::Command> {
         match language_server_id.as_ref() {
-            "slang" => Ok(zed::Command {
+            Slang::LANGUAGE_SERVER_ID => Ok(zed::Command {
                 command: self.slang.get_binary(language_server_id, worktree)?,
                 args: Vec::new(),
                 env: Vec::new(),
@@ -41,7 +41,7 @@ impl zed::Extension for VerilogExtension {
             }),
             Verible::LANGUAGE_SERVER_ID => {
                 let language_settings =
-                    zed::settings::LanguageSettings::for_worktree(Some("Verilog"), worktree)?;
+                    zed::settings::LanguageSettings::for_worktree(Some("SystemVerilog"), worktree)?;
 
                 Ok(zed::Command {
                     command: self.verible.get_binary(language_server_id, worktree)?,
