@@ -22,11 +22,11 @@ Adds Verilog and SystemVerilog support for [Zed](https://zed.dev/).
 5. Press `Install` and the language server will automatically be downloaded.
 ## Configuration
 
-Configuration for this extension is done in two places. First is by adding "Verilog" your settings file and using the settings documented [here](https://zed.dev/docs/configuring-zed#languages) like so:
+Configuration for this extension is done in two places. First is by adding "SystemVerilog" your settings file and using the settings documented [here](https://zed.dev/docs/configuring-zed#languages) like so:
 
 ```json
 "languages": {
-    "Verilog": {
+    "SystemVerilog": {
 
     }
 }
