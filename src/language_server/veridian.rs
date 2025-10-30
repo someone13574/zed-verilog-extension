@@ -9,7 +9,7 @@ pub struct Veridian {
 impl LanguageServer for Veridian {
     const LANGUAGE_SERVER_ID: &'static str = "veridian";
     const DOWNLOAD_REPO: &'static str = "someone13574/zed-verilog-extension";
-    const DOWNLOAD_TAG: &'static str = "v0.0.13";
+    const DOWNLOAD_TAG: &'static str = "v0.0.14";
 
     fn get_cached_binary(&self) -> Option<String> {
         self.cached_binary.clone()

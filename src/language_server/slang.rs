@@ -9,7 +9,7 @@ pub struct Slang {
 impl LanguageServer for Slang {
     const LANGUAGE_SERVER_ID: &'static str = "slang";
     const DOWNLOAD_REPO: &'static str = "someone13574/zed-verilog-extension";
-    const DOWNLOAD_TAG: &'static str = "v0.0.13";
+    const DOWNLOAD_TAG: &'static str = "v0.0.14";
 
     fn get_cached_binary(&self) -> Option<String> {
         self.cached_binary.clone()
