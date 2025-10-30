@@ -49,7 +49,7 @@ impl zed::Extension for VerilogExtension {
                         "--indentation_spaces".to_string(),
                         language_settings.tab_size.to_string(),
                         "--rules_config".to_string(),
-                        worktree.root_path() + "/.rules.verible_lint"
+                        worktree.root_path() + "/.rules.verible_lint",
                     ],
                     env: Vec::new(),
                 })
