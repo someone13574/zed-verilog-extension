@@ -20,7 +20,7 @@ Adds Verilog and SystemVerilog support for [Zed](https://zed.dev/).
 
 ## Language Servers
 
-This extension has three language servers: [Verible](https://github.com/chipsalliance/verible), [Veridian](https://github.com/vivekmalneedi/veridian), and [slang-server](https://github.com/hudson-trading/slang-server). **By default, only Verible and Veridian are enabled** due to slang-server being relatively new and having issues on Windows. To enable slang-server, add the following to your settings file:
+This extension has three language servers: [Verible](https://github.com/chipsalliance/verible), [Veridian](https://github.com/vivekmalneedi/veridian), and [slang-server](https://github.com/hudson-trading/slang-server). **By default, only Verible and Veridian are enabled** due to slang-server being relatively new and having an issue where it produces errors on non-verilog files. To enable slang-server, add the following to your settings file:
 
 ```json
 "languages": {
