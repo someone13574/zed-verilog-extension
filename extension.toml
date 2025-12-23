@@ -1,7 +1,7 @@
 id = "verilog"
 name = "Verilog"
 description = "Verilog and SystemVerilog support"
-version = "0.0.14"
+version = "0.0.15"
 schema_version = 1
 authors = ["someone13574 <owenlaw222@gmail.com>"]
 repository = "https://github.com/someone13574/zed-verilog-extension"
