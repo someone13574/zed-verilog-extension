@@ -88,10 +88,9 @@ impl LanguageServer for Svls {
                 &zed::LanguageServerInstallationStatus::Downloading,
             );
 
-            zed::download_file(&asset.download_url, "", zed::DownloadedFileType::Zip)
-                .map_err(|err| {
-                    format!("failed to download file `{}`: {err}", asset.download_url)
-                })?;
+            zed::download_file(&asset.download_url, "", zed::DownloadedFileType::Zip).map_err(
+                |err| format!("failed to download file `{}`: {err}", asset.download_url),
+            )?;
         }
 
         zed::set_language_server_installation_status(

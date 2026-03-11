@@ -1,4 +1,6 @@
-use language_server::{slang::Slang, svls::Svls, verible::Verible, veridian::Veridian, LanguageServer};
+use language_server::{
+    slang::Slang, svls::Svls, verible::Verible, veridian::Veridian, LanguageServer,
+};
 
 use zed::{LanguageServerId, Worktree};
 use zed_extension_api::{self as zed};
