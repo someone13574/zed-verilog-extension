@@ -23,12 +23,28 @@ pub trait LanguageServer {
         os: zed::Os,
         arch: zed::Architecture,
     ) -> zed::Result<String> {
+        let binary_path = Self::binary_path(Self::DOWNLOAD_TAG, os, arch)?;
+        if fs::metadata(&binary_path).is_ok_and(|metadata| metadata.is_file()) {
+            zed::set_language_server_installation_status(
+                language_server_id,
+                &zed::LanguageServerInstallationStatus::None,
+            );
+
+            return Ok(binary_path);
+        }
+
         zed::set_language_server_installation_status(
             language_server_id,
             &zed::LanguageServerInstallationStatus::CheckingForUpdate,
         );
 
-        let release = zed::github_release_by_tag_name(Self::DOWNLOAD_REPO, Self::DOWNLOAD_TAG)?;
+        let release = zed::github_release_by_tag_name(Self::DOWNLOAD_REPO, Self::DOWNLOAD_TAG)
+            .map_err(|err| {
+                format!(
+                    "failed to find release tag for server `{}`: {err}",
+                    Self::LANGUAGE_SERVER_ID
+                )
+            })?;
 
         let asset_name = Self::asset_name(&release.version, os, arch)?;
         let asset = release
@@ -36,24 +52,21 @@ pub trait LanguageServer {
             .into_iter()
             .find(|asset| asset.name == asset_name)
             .ok_or(format!("no asset found matching `{asset_name}`"))?;
-        let binary_path = Self::binary_path(&release.version, os, arch)?;
 
-        if !fs::metadata(&binary_path).is_ok_and(|metadata| metadata.is_file()) {
-            zed::set_language_server_installation_status(
-                language_server_id,
-                &zed::LanguageServerInstallationStatus::Downloading,
-            );
+        zed::set_language_server_installation_status(
+            language_server_id,
+            &zed::LanguageServerInstallationStatus::Downloading,
+        );
 
-            zed::download_file(
-                &asset.download_url,
-                "",
-                match os {
-                    zed::Os::Mac | zed::Os::Linux => zed::DownloadedFileType::GzipTar,
-                    zed::Os::Windows => zed::DownloadedFileType::Zip,
-                },
-            )
-            .map_err(|err| format!("failed to download file `{}`: {err}", asset.download_url))?;
-        }
+        zed::download_file(
+            &asset.download_url,
+            "",
+            match os {
+                zed::Os::Mac | zed::Os::Linux => zed::DownloadedFileType::GzipTar,
+                zed::Os::Windows => zed::DownloadedFileType::Zip,
+            },
+        )
+        .map_err(|err| format!("failed to download file `{}`: {err}", asset.download_url))?;
 
         zed::set_language_server_installation_status(
             language_server_id,
