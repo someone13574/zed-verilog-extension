@@ -9,7 +9,7 @@ pub struct Verible {
 impl LanguageServer for Verible {
     const LANGUAGE_SERVER_ID: &'static str = "verible";
     const DOWNLOAD_REPO: &'static str = "chipsalliance/verible";
-    const DOWNLOAD_TAG: &'static str = "v0.0-4051-g9fdb4057";
+    const DOWNLOAD_TAG: &'static str = "v0.0-4053-g89d4d98a";
 
     fn get_cached_binary(&self) -> Option<String> {
         self.cached_binary.clone()
