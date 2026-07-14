@@ -1,4 +1,6 @@
-use language_server::{slang::Slang, verible::Verible, veridian::Veridian, LanguageServer};
+use language_server::{
+    slang::Slang, svls::Svls, verible::Verible, veridian::Veridian, LanguageServer,
+};
 
 use zed::{LanguageServerId, Worktree};
 use zed_extension_api::{self as zed};
@@ -9,6 +11,7 @@ struct VerilogExtension {
     verible: Verible,
     veridian: Veridian,
     slang: Slang,
+    svls: Svls,
 }
 
 impl zed::Extension for VerilogExtension {
@@ -20,6 +23,7 @@ impl zed::Extension for VerilogExtension {
             verible: Default::default(),
             veridian: Default::default(),
             slang: Default::default(),
+            svls: Default::default(),
         }
     }
 
@@ -54,6 +58,11 @@ impl zed::Extension for VerilogExtension {
                     env: Vec::new(),
                 })
             }
+            Svls::LANGUAGE_SERVER_ID => Ok(zed::Command {
+                command: self.svls.get_binary(language_server_id, worktree)?,
+                args: Vec::new(),
+                env: Vec::new(),
+            }),
             id => Err(format!("unknown language server `{id}`"))?,
         }
     }

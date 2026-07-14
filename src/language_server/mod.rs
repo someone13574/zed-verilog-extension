@@ -1,4 +1,5 @@
 pub mod slang;
+pub mod svls;
 pub mod verible;
 pub mod veridian;
 
