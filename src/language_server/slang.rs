@@ -9,7 +9,7 @@ pub struct Slang {
 impl LanguageServer for Slang {
     const LANGUAGE_SERVER_ID: &'static str = "slang";
     const DOWNLOAD_REPO: &'static str = "hudson-trading/slang-server";
-    const DOWNLOAD_TAG: &'static str = "v0.2.5";
+    const DOWNLOAD_TAG: &'static str = "v0.2.9";
 
     fn get_cached_binary(&self) -> Option<String> {
         self.cached_binary.clone()
@@ -45,7 +45,7 @@ impl LanguageServer for Slang {
             // Currently not being built by CI, enable when implemented
             // (zed::Os::Mac, zed::Architecture::X8664) => "slang-server-x86_64-macos.tar.gz",
             // (zed::Os::Linux, zed::Architecture::Aarch64) => "slang-server-linux-arm64.tar.gz",
-            (zed::Os::Linux, zed::Architecture::X8664) => "slang-server-linux-x64-clang.tar.gz",
+            (zed::Os::Linux, zed::Architecture::X8664) => "slang-server-linux-x64.tar.gz",
             (zed::Os::Windows, zed::Architecture::X8664) => "slang-server-windows-x64.zip",
             (os, arch) => {
                 return Err(format!("architecture {arch:?} not supported on {os:?}"));
