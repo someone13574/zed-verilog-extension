@@ -17,6 +17,12 @@ pub trait LanguageServer {
     fn binary_name(os: zed::Os) -> String;
     fn binary_path(version: &str, os: zed::Os, arch: zed::Architecture) -> zed::Result<String>;
     fn asset_name(version: &str, os: zed::Os, arch: zed::Architecture) -> zed::Result<String>;
+    fn asset_type(os: zed::Os) -> zed::Result<zed::DownloadedFileType> {
+        Ok(match os {
+            zed::Os::Mac | zed::Os::Linux => zed::DownloadedFileType::GzipTar,
+            zed::Os::Windows => zed::DownloadedFileType::Zip,
+        })
+    }
 
     fn download_binary(
         &self,
@@ -59,15 +65,8 @@ pub trait LanguageServer {
             &zed::LanguageServerInstallationStatus::Downloading,
         );
 
-        zed::download_file(
-            &asset.download_url,
-            "",
-            match os {
-                zed::Os::Mac | zed::Os::Linux => zed::DownloadedFileType::GzipTar,
-                zed::Os::Windows => zed::DownloadedFileType::Zip,
-            },
-        )
-        .map_err(|err| format!("failed to download file `{}`: {err}", asset.download_url))?;
+        zed::download_file(&asset.download_url, "", Self::asset_type(os)?)
+            .map_err(|err| format!("failed to download file `{}`: {err}", asset.download_url))?;
 
         zed::set_language_server_installation_status(
             language_server_id,

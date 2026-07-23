@@ -1,5 +1,4 @@
 use super::LanguageServer;
-use std::fs;
 use zed_extension_api::{self as zed};
 
 #[derive(Default)]
@@ -55,44 +54,9 @@ impl LanguageServer for Svls {
         Ok(format!("svls-{version}-{target}.zip"))
     }
 
-    // svls releases use zip for all platforms, unlike the default which uses GzipTar for Mac/Linux
-    fn download_binary(
-        &self,
-        language_server_id: &zed::LanguageServerId,
-        os: zed::Os,
-        arch: zed::Architecture,
-    ) -> zed::Result<String> {
-        zed::set_language_server_installation_status(
-            language_server_id,
-            &zed::LanguageServerInstallationStatus::CheckingForUpdate,
-        );
-
-        let release = zed::github_release_by_tag_name(Self::DOWNLOAD_REPO, Self::DOWNLOAD_TAG)?;
-
-        let asset_name = Self::asset_name(&release.version, os, arch)?;
-        let asset = release
-            .assets
-            .into_iter()
-            .find(|asset| asset.name == asset_name)
-            .ok_or(format!("no asset found matching `{asset_name}`"))?;
-        let binary_path = Self::binary_path(&release.version, os, arch)?;
-
-        if !fs::metadata(&binary_path).is_ok_and(|metadata| metadata.is_file()) {
-            zed::set_language_server_installation_status(
-                language_server_id,
-                &zed::LanguageServerInstallationStatus::Downloading,
-            );
-
-            zed::download_file(&asset.download_url, "", zed::DownloadedFileType::Zip).map_err(
-                |err| format!("failed to download file `{}`: {err}", asset.download_url),
-            )?;
-        }
-
-        zed::set_language_server_installation_status(
-            language_server_id,
-            &zed::LanguageServerInstallationStatus::None,
-        );
-
-        Ok(binary_path)
+    fn asset_type(
+        _os: zed_extension_api::Os,
+    ) -> zed_extension_api::Result<zed_extension_api::DownloadedFileType> {
+        Ok(zed_extension_api::DownloadedFileType::Zip)
     }
 }
