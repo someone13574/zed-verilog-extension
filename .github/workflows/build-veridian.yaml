@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Veridian
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: vivekmalneedi/veridian
 
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Veridian
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: vivekmalneedi/veridian
 
@@ -70,7 +70,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Veridian
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: vivekmalneedi/veridian
 
@@ -97,7 +97,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Veridian
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: vivekmalneedi/veridian
 
@@ -124,7 +124,7 @@ jobs:
     runs-on: "windows-latest"
     steps:
       - name: Checkout Veridian
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: vivekmalneedi/veridian
 

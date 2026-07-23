@@ -5,7 +5,7 @@ use language_server::{
 use zed::{LanguageServerId, Worktree};
 use zed_extension_api::{self as zed};
 
-mod language_server;
+pub mod language_server;
 
 struct VerilogExtension {
     verible: Verible,
