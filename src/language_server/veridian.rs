@@ -29,10 +29,10 @@ impl LanguageServer for Veridian {
 
     fn binary_path(
         _version: &str,
-        _os: zed_extension_api::Os,
+        os: zed_extension_api::Os,
         _arch: zed_extension_api::Architecture,
     ) -> zed_extension_api::Result<String> {
-        Ok("veridian".to_string())
+        Ok(Self::binary_name(os))
     }
 
     fn asset_name(
@@ -42,7 +42,7 @@ impl LanguageServer for Veridian {
     ) -> zed_extension_api::Result<String> {
         Ok(match (os, arch) {
             (zed::Os::Mac, zed::Architecture::Aarch64) => "veridian-aarch64-macos.tar.gz",
-            (zed::Os::Mac, zed::Architecture::X8664) => "veridian-aarch64-x86_64-macos.tar.gz",
+            (zed::Os::Mac, zed::Architecture::X8664) => "veridian-x86_64-macos.tar.gz",
             (zed::Os::Linux, zed::Architecture::Aarch64) => "veridian-aarch64-linux-musl.tar.gz",
             (zed::Os::Linux, zed::Architecture::X8664) => "veridian-x86_64-linux-musl.tar.gz",
             (zed::Os::Windows, zed::Architecture::X8664) => "veridian-x86_64-windows-mscv.zip",

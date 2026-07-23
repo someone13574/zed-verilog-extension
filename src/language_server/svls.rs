@@ -30,10 +30,14 @@ impl LanguageServer for Svls {
 
     fn binary_path(
         _version: &str,
-        _os: zed_extension_api::Os,
+        os: zed_extension_api::Os,
         _arch: zed_extension_api::Architecture,
     ) -> zed_extension_api::Result<String> {
-        Ok("svls".to_string())
+        Ok(match os {
+            zed_extension_api::Os::Windows => "target/x86_64-pc-windows-msvc/release/svls.exe",
+            _ => "svls",
+        }
+        .to_string())
     }
 
     fn asset_name(
@@ -41,23 +45,14 @@ impl LanguageServer for Svls {
         os: zed_extension_api::Os,
         arch: zed_extension_api::Architecture,
     ) -> zed_extension_api::Result<String> {
-        Ok(match (os, arch) {
-            (zed::Os::Mac, zed::Architecture::Aarch64) => {
-                format!("svls-{version}-aarch64-mac.zip")
-            }
-            (zed::Os::Mac, zed::Architecture::X8664) => {
-                format!("svls-{version}-x86_64-mac.zip")
-            }
-            (zed::Os::Linux, zed::Architecture::X8664) => {
-                format!("svls-{version}-x86_64-lnx.zip")
-            }
-            (zed::Os::Windows, zed::Architecture::X8664) => {
-                format!("svls-{version}-x86_64-win.zip")
-            }
-            (os, arch) => {
-                return Err(format!("architecture {arch:?} not supported on {os:?}"));
-            }
-        })
+        let target = match (os, arch) {
+            (zed::Os::Mac, zed::Architecture::Aarch64) => "aarch64-mac",
+            (zed::Os::Mac, zed::Architecture::X8664) => "x86_64-mac",
+            (zed::Os::Linux, zed::Architecture::X8664) => "x86_64-lnx",
+            (zed::Os::Windows, zed::Architecture::X8664) => "x86_64-win",
+            (os, arch) => return Err(format!("architecture {arch:?} not supported on {os:?}")),
+        };
+        Ok(format!("svls-{version}-{target}.zip"))
     }
 
     // svls releases use zip for all platforms, unlike the default which uses GzipTar for Mac/Linux

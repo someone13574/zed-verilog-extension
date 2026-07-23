@@ -29,10 +29,10 @@ impl LanguageServer for Slang {
 
     fn binary_path(
         _version: &str,
-        _os: zed_extension_api::Os,
+        os: zed_extension_api::Os,
         _arch: zed_extension_api::Architecture,
     ) -> zed_extension_api::Result<String> {
-        Ok("slang-server".to_string())
+        Ok(Self::binary_name(os))
     }
 
     fn asset_name(

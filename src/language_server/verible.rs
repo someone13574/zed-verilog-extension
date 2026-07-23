@@ -33,7 +33,7 @@ impl LanguageServer for Verible {
             match os {
                 zed::Os::Mac => "-macOS/bin",
                 zed::Os::Linux => "/bin",
-                zed::Os::Windows => "-win64/",
+                zed::Os::Windows => "-win64",
             }
         );
         let binary_name = Self::binary_name(os);
